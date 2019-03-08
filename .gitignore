@@ -1,0 +1,10 @@
+/resources/application.properties
+local.properties
+.gradle/
+gradle/
+gradlew
+.idea/
+gradlew.bat
+gedit
+out/
+build/
