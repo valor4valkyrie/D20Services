@@ -1,16 +1,15 @@
 package v1;
 
+import application.stats.dto.Stats;
 import application.stats.model.StatsModel;
 import application.stats.service.StatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.ws.rs.client.Entity;
 import java.util.Optional;
-import java.util.Random;
 
 @RestController
 public class CharacterEndpoint {
@@ -18,25 +17,23 @@ public class CharacterEndpoint {
     @Autowired
     private StatService statService;
 
-    @PostMapping(value = "/test", produces = "application/json")
-    public ResponseEntity<String> saveStatsEndpoint(@RequestParam(value="id", defaultValue="1") int id){
-        Random random = new Random();
-        StatsModel statsModel = new StatsModel();
-        statsModel.setCharisma(random.nextInt(20));
-        statsModel.setConstitution(random.nextInt(20));
-        statsModel.setDexterity(random.nextInt(20));
-        statsModel.setIntelligence(random.nextInt(20));
-        statsModel.setStrength(random.nextInt(20));
-        statsModel.setWisdom(random.nextInt(20));
+    @PutMapping(value = "/character/stats", produces = "application/json")
+    public ResponseEntity<String> saveStatsEndpoint(@RequestBody(required = true) Stats stats){
 
-        statService.saveStats(statsModel);
+        statService.saveStats(Stats.toModel(Entity.json(stats).getEntity()));
 
-        Optional<StatsModel> modelStat = statService.getStats(id);
+        return new ResponseEntity(HttpStatus.OK);
+    }
 
-        if(modelStat.isPresent()){
-            return new ResponseEntity(modelStat.get(), HttpStatus.OK);
+    @GetMapping(value = "/character/stats", produces = "application/json")
+    public ResponseEntity<StatsModel> getStatsEnpogint(@RequestParam(value="id") int id){
+        Optional<StatsModel> statsModel = statService.getStats(id);
+
+        if(statsModel.isPresent()){
+            ResponseEntity entity = new ResponseEntity(statsModel, HttpStatus.OK);
+            return entity;
         }
 
-        return new ResponseEntity(id, HttpStatus.OK);
+        return new ResponseEntity<StatsModel>(HttpStatus.NO_CONTENT);
     }
 }
