@@ -18,7 +18,7 @@ public class CharacterEndpoint {
     private StatService statService;
 
     @PutMapping(value = "/character/stats", produces = "application/json")
-    public ResponseEntity<String> saveStatsEndpoint(@RequestBody(required = true) Stats stats){
+    public ResponseEntity<String> saveStatsEndpoint(@RequestHeader("JWT") String jwt, @RequestBody(required = true) Stats stats){
 
         statService.saveStats(Stats.toModel(Entity.json(stats).getEntity()));
 
@@ -34,6 +34,6 @@ public class CharacterEndpoint {
             return entity;
         }
 
-        return new ResponseEntity<StatsModel>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 }
