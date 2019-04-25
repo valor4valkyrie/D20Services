@@ -8,73 +8,73 @@ public class Stats implements Serializable {
 
     private static final long serialVersionUID = 1l;
 
-    private int strength;
-    private int dexterity;
-    private int constitution;
-    private int intelligence;
-    private int wisdom;
-    private int charisma;
+    private Stat strength;
+    private Stat dexterity;
+    private Stat constitution;
+    private Stat intelligence;
+    private Stat wisdom;
+    private Stat charisma;
 
     public static StatsModel toModel(Stats stats) {
         StatsModel model = new StatsModel();
 
-        model.setStrength(stats.getStrength());
-        model.setDexterity(stats.getDexterity());
-        model.setConstitution(stats.getConstitution());
-        model.setIntelligence(stats.getIntelligence());
-        model.setWisdom(stats.getWisdom());
-        model.setCharisma(stats.getCharisma());
+        model.setStrength(stats.getStrength().getStat());
+        model.setDexterity(stats.getDexterity().getStat());
+        model.setConstitution(stats.getConstitution().getStat());
+        model.setIntelligence(stats.getIntelligence().getStat());
+        model.setWisdom(stats.getWisdom().getStat());
+        model.setCharisma(stats.getCharisma().getStat());
 
         return model;
     }
 
     public Stats(){}
 
-    public int getStrength() {
+    public Stat getStrength() {
         return strength;
     }
 
-    public void setStrength(int strength) {
+    public void setStrength(Stat strength) {
         this.strength = strength;
     }
 
-    public int getDexterity() {
+    public Stat getDexterity() {
         return dexterity;
     }
 
-    public void setDexterity(int dexterity) {
+    public void setDexterity(Stat dexterity) {
         this.dexterity = dexterity;
     }
 
-    public int getConstitution() {
+    public Stat getConstitution() {
         return constitution;
     }
 
-    public void setConstitution(int constitution) {
+    public void setConstitution(Stat constitution) {
         this.constitution = constitution;
     }
 
-    public int getIntelligence() {
+    public Stat getIntelligence() {
         return intelligence;
     }
 
-    public void setIntelligence(int intelligence) {
+    public void setIntelligence(Stat intelligence) {
         this.intelligence = intelligence;
     }
 
-    public int getWisdom() {
+    public Stat getWisdom() {
         return wisdom;
     }
 
-    public void setWisdom(int wisdom) {
+    public void setWisdom(Stat wisdom) {
         this.wisdom = wisdom;
     }
 
-    public int getCharisma() {
+    public Stat getCharisma() {
         return charisma;
     }
 
-    public void setCharisma(int charisma) {
+    public void setCharisma(Stat charisma) {
         this.charisma = charisma;
     }
 }
