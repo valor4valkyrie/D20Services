@@ -26,7 +26,7 @@ public class StatsEndpoint {
     @Autowired
     private StatService statService;
 
-    @PutMapping(value = "/character/stats", produces = "application/json")
+    @PutMapping(value = "/v1/character/stats", produces = "application/json")
     public ResponseEntity<String> saveStatsEndpoint(@RequestHeader("JWT") String jwt, @RequestBody(required = true) Stats stats){
 
         BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
@@ -56,7 +56,7 @@ public class StatsEndpoint {
     }
 
 
-    @GetMapping(value = "/character/stats", produces = "application/json")
+    @GetMapping(value = "/v1/character/stats", produces = "application/json")
     public ResponseEntity<StatsModel> getStatsEnpogint(@RequestHeader("JWT") String jwt, @RequestParam(value="id") int id){
 
         BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
