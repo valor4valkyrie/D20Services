@@ -1,7 +1,5 @@
 package application.stats.dto;
 
-import application.Route;
-
 import java.io.Serializable;
 
 public class Stat implements Serializable{
