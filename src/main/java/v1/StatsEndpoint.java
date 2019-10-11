@@ -4,6 +4,7 @@ import application.stats.dto.Stats;
 import application.stats.model.StatsModel;
 import application.stats.service.StatService;
 import com.google.common.flogger.FluentLogger;
+import org.assertj.core.util.Lists;
 import org.jasypt.util.text.BasicTextEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.client.Entity;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -21,10 +23,12 @@ public class StatsEndpoint {
     private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
     @Autowired
-    Environment env;
+    private Environment env;
 
     @Autowired
     private StatService statService;
+
+    private List<String> profileList = Lists.newArrayList(env.getActiveProfiles());
 
     @PutMapping(value = "/v1/character/stats", produces = "application/json")
     public ResponseEntity<String> saveStatsEndpoint(@RequestHeader("JWT") String jwt, @RequestBody(required = true) Stats stats){
@@ -33,20 +37,22 @@ public class StatsEndpoint {
 
         textEncryptor.setPassword(env.getProperty("security.jwt.password"));
 
-        try {
+        if(!profileList.contains("dev")) {
+            try {
 
-            String decrypt = textEncryptor.decrypt(jwt);
+                String decrypt = textEncryptor.decrypt(jwt);
 
-            LocalDateTime tokenDate = LocalDateTime.parse(decrypt.substring(decrypt.indexOf("-") + 1));
+                LocalDateTime tokenDate = LocalDateTime.parse(decrypt.substring(decrypt.indexOf("-") + 1));
 
-            if(LocalDateTime.now().isAfter(tokenDate.plusSeconds(5))) {
-                logger.atSevere().log("Invalid token to save a character. {}", tokenDate);
+                if (LocalDateTime.now().isAfter(tokenDate.plusSeconds(5))) {
+                    logger.atSevere().log("Invalid token to save a character. {}", tokenDate);
+                    return new ResponseEntity(HttpStatus.BAD_REQUEST);
+                }
+
+            } catch (Exception e) {
+                logger.atSevere().withCause(e).log("Could not decrypt token {}", e);
                 return new ResponseEntity(HttpStatus.BAD_REQUEST);
             }
-
-        }catch (Exception e) {
-            logger.atSevere().withCause(e).log("Could not decrypt token {}", e);
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
         statService.saveStats(Stats.toModel(Entity.json(stats).getEntity()));
@@ -57,7 +63,7 @@ public class StatsEndpoint {
 
 
     @GetMapping(value = "/v1/character/stats", produces = "application/json")
-    public ResponseEntity<StatsModel> getStatsEnpogint(@RequestHeader("JWT") String jwt, @RequestParam(value="id") int id){
+    public ResponseEntity<StatsModel> getStatsEndpoint(@RequestHeader("JWT") String jwt, @RequestParam(value="id") int id){
 
         BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
 
@@ -65,20 +71,21 @@ public class StatsEndpoint {
 
         String g = textEncryptor.encrypt(env.getProperty("security.jwt.password") + "-" + LocalDateTime.now().toString());
 
-        try {
+        if(!profileList.contains("dev")) {
+            try {
+                String decrypt = textEncryptor.decrypt(jwt);
 
-            String decrypt = textEncryptor.decrypt(jwt);
+                LocalDateTime tokenDate = LocalDateTime.parse(decrypt.substring(decrypt.indexOf("-") + 1));
 
-            LocalDateTime tokenDate = LocalDateTime.parse(decrypt.substring(decrypt.indexOf("-") + 1));
+                if (LocalDateTime.now().isAfter(tokenDate.plusSeconds(5))) {
+                    logger.atSevere().log("Expired Token");
+                    return new ResponseEntity(HttpStatus.NOT_FOUND);
+                }
 
-            if(LocalDateTime.now().isAfter(tokenDate.plusSeconds(5))) {
-                logger.atSevere().log("Expired Token");
+            } catch (Exception e) {
+                logger.atSevere().log("Error decrypting token");
                 return new ResponseEntity(HttpStatus.NOT_FOUND);
             }
-
-        }catch (Exception e) {
-            logger.atSevere().log("Error decrypting token");
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
 
         Optional<StatsModel> statsModel = statService.getStats(id);
