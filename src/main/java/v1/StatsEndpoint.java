@@ -28,14 +28,14 @@ public class StatsEndpoint {
     @Autowired
     private StatService statService;
 
-    private List<String> profileList = Lists.newArrayList(env.getActiveProfiles());
-
     @PutMapping(value = "/v1/character/stats", produces = "application/json")
     public ResponseEntity<String> saveStatsEndpoint(@RequestHeader("JWT") String jwt, @RequestBody(required = true) Stats stats){
 
         BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
 
         textEncryptor.setPassword(env.getProperty("security.jwt.password"));
+
+        List<String> profileList = Lists.newArrayList(env.getActiveProfiles());
 
         if(!profileList.contains("dev")) {
             try {
@@ -70,6 +70,8 @@ public class StatsEndpoint {
         textEncryptor.setPassword(env.getProperty("security.jwt.password"));
 
         String g = textEncryptor.encrypt(env.getProperty("security.jwt.password") + "-" + LocalDateTime.now().toString());
+
+        List<String> profileList = Lists.newArrayList(env.getActiveProfiles());
 
         if(!profileList.contains("dev")) {
             try {

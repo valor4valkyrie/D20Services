@@ -9,7 +9,7 @@ public class PlayerModel {
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "PLAYER_FIRST_NAME")
     private String playerFirstName;
@@ -28,7 +28,7 @@ public class PlayerModel {
 
     public PlayerModel(){}
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
