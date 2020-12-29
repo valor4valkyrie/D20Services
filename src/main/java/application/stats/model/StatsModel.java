@@ -3,11 +3,11 @@ package application.stats.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "STATS")
+@Table(name = "PLAYER_CHARACTER_STATS")
 public class StatsModel {
     @Id
     @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     @Column(name = "STR")

@@ -1,4 +1,4 @@
-package v1;
+package application.stats.controller;
 
 import application.stats.dto.Stats;
 import application.stats.model.StatsModel;

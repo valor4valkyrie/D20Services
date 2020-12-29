@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class PlayerModel {
 
     @Id
-    @Column(name = "ID")
+    @Column(name = "PLAYER_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 

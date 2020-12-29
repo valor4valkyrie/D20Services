@@ -1,4 +1,4 @@
-package v1;
+package application.player.controller;
 
 import application.player.model.PlayerModel;
 import application.player.service.PlayerService;
@@ -60,8 +60,6 @@ public class PlayerInfoEndpoint {
         Optional<PlayerModel> playerOptional = playerService.getPlayerInfo(id);
         if(playerOptional.isPresent()) {
             if(playerOptional.get().getPlayerPassword().matches(textEncryptor.decrypt(password))) {
-                Gson gson
-                return ResponseEntity.
             }
         }
 
