@@ -8,11 +8,11 @@ public class ApplicationContextProvider implements ApplicationContextAware {
 
     private volatile static ApplicationContext context;
 
-    public ApplicationContextProvider(){
+    public ApplicationContextProvider() {
 
     }
 
-    public ApplicationContext getApplicationContext(){
+    public ApplicationContext getApplicationContext() {
         return context;
     }
 

@@ -1,14 +1,16 @@
 package application.stats.model;
 
+import application.player.model.PlayerModel;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "PLAYER_CHARACTER_STATS")
 public class StatsModel {
     @Id
-    @Column(name = "ID")
+    @Column(name = "STATS_ID")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private int statsID;
 
     @Column(name = "STR")
     private int strength;
@@ -28,15 +30,19 @@ public class StatsModel {
     @Column(name = "CHA")
     private int charisma;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PLAYER_CHARACTER_ID")
+    private PlayerModel playerModel;
+
     public StatsModel() {
     }
 
-    public int getId() {
-        return id;
+    public int getStatsId() {
+        return statsID;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId(int statsID) {
+        this.statsID = statsID;
     }
 
     public int getStrength() {
@@ -85,5 +91,13 @@ public class StatsModel {
 
     public void setCharisma(int charisma) {
         this.charisma = charisma;
+    }
+
+    public PlayerModel getPlayerModel() {
+        return playerModel;
+    }
+
+    public void setPlayerModel(PlayerModel playerModel) {
+        this.playerModel = playerModel;
     }
 }

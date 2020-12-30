@@ -8,8 +8,8 @@ public class PlayerModel {
 
     @Id
     @Column(name = "PLAYER_ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Integer playerID;
 
     @Column(name = "PLAYER_FIRST_NAME")
     private String playerFirstName;
@@ -26,14 +26,15 @@ public class PlayerModel {
     @Column(name = "PLAYER_PASSWORD")
     private String playerPassword;
 
-    public PlayerModel(){}
+    public PlayerModel() {
+    }
 
     public Integer getId() {
-        return id;
+        return playerID;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.playerID = playerID;
     }
 
     public String getPlayerFirstName() {

@@ -9,9 +9,9 @@ import javax.persistence.*;
 public class CharacterModel {
 
     @Id
-    @Column(name = "ID")
+    @Column(name = "PLAYER_CHARACTER_ID")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private int playerCharacterID;
 
     @Column(name = "CHARACTER_FIRST_NAME")
     private String characterFirstName;

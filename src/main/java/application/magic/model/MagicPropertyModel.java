@@ -16,7 +16,7 @@ public class MagicPropertyModel {
     @Column(name = "MAGIC_PROPERTY_NAME")
     private String magicPropertyName;
 
-    @Column(name ="MAGIC_PROPERTY_AURA")
+    @Column(name = "MAGIC_PROPERTY_AURA")
     private String magicPropertyAura;
 
     @Column(name = "MAGIC_PROPERTY_STRENGTH")
@@ -42,12 +42,6 @@ public class MagicPropertyModel {
 
     @Column(name = "CHARACTER_ATTACK_BONUS")
     private int characterAttackBonus;
-/*
-    @ManyToOne(fetch = FetchType.LAZY)
-    private WeaponModel weaponModel;
-*/
-    @ManyToOne(fetch = FetchType.LAZY)
-    private ArmorModel armorModel;
 
     public MagicPropertyModel() {
 
@@ -131,21 +125,5 @@ public class MagicPropertyModel {
 
     public void setCharacterAttackBonus(int characterAttackBonus) {
         this.characterAttackBonus = characterAttackBonus;
-    }
-/*
-    public WeaponModel getWeaponModel() {
-        return weaponModel;
-    }
-
-    public void setWeaponModel(WeaponModel weaponModel) {
-        this.weaponModel = weaponModel;
-    }
-*/
-    public ArmorModel getArmorModel() {
-        return armorModel;
-    }
-
-    public void setArmorModel(ArmorModel armorModel) {
-        this.armorModel = armorModel;
     }
 }

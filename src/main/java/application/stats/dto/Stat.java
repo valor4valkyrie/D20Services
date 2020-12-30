@@ -2,7 +2,7 @@ package application.stats.dto;
 
 import java.io.Serializable;
 
-public class Stat implements Serializable{
+public class Stat implements Serializable {
 
     private static final long serialVersionUID = 1l;
 
@@ -10,19 +10,20 @@ public class Stat implements Serializable{
     private int stat = 0;
     private int tempStat = 0;
 
-    public Stat(String name, int stat){
+    public Stat(String name, int stat) {
         this.name = name;
         this.stat = stat;
 
     }
 
-    public Stat(String name, int stat, int tempStat){
+    public Stat(String name, int stat, int tempStat) {
         this.name = name;
         this.stat = stat;
         this.tempStat = tempStat;
     }
 
-    public Stat(){}
+    public Stat() {
+    }
 
     public String getName() {
         return name;

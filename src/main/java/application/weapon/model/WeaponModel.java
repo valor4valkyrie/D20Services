@@ -38,6 +38,7 @@ public class WeaponModel {
     private String characterWeaponType;
 
     @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MAGIC_PROPERTIES_ID")
     private List<MagicPropertyModel> magicModelList;
 
     @ManyToOne(fetch = FetchType.LAZY)

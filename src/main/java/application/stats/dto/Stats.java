@@ -15,9 +15,13 @@ public class Stats implements Serializable {
     private Stat wisdom;
     private Stat charisma;
 
-    public static StatsModel toModel(Stats stats) {
+    public Stats() {
+    }
+
+    public static StatsModel toModel(Integer playerID, Stats stats) {
         StatsModel model = new StatsModel();
 
+        model.setId(playerID);
         model.setStrength(stats.getStrength().getStat());
         model.setDexterity(stats.getDexterity().getStat());
         model.setConstitution(stats.getConstitution().getStat());
@@ -27,8 +31,6 @@ public class Stats implements Serializable {
 
         return model;
     }
-
-    public Stats(){}
 
     public Stat getStrength() {
         return strength;

@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@NamedEntityGraph(name ="Armor.magicProperties",
+@NamedEntityGraph(name = "Armor.magicProperties",
         attributeNodes = @NamedAttributeNode("magicModelList")
 )
 @Entity
@@ -26,7 +26,7 @@ public class ArmorModel {
     private int characterArmorWeight;
 
     @Column(name = "CHARACTER_ARMOR_WEIGHT_UNIT")
-    private int characterArmorWeightUnit;
+    private String characterArmorWeightUnit;
 
     @Column(name = "CHARACTER_ARMOR_TYPE")
     private String characterArmorType;
@@ -37,7 +37,8 @@ public class ArmorModel {
     @Column(name = "CHARACTER_ARMOR_SPELL_FAILURE")
     private int characterArmorSpellFailure;
 
-    @OneToMany(mappedBy = "armorModel", fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MAGIC_PROPERTIES_ID")
     private List<MagicPropertyModel> magicModelList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -64,11 +65,11 @@ public class ArmorModel {
         this.characterArmorWeight = characterArmorWeight;
     }
 
-    public int getCharacterArmorWeightUnit() {
+    public String getCharacterArmorWeightUnit() {
         return characterArmorWeightUnit;
     }
 
-    public void setCharacterArmorWeightUnit(int characterArmorWeightUnit) {
+    public void setCharacterArmorWeightUnit(String characterArmorWeightUnit) {
         this.characterArmorWeightUnit = characterArmorWeightUnit;
     }
 

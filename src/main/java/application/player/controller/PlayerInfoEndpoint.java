@@ -1,23 +1,15 @@
 package application.player.controller;
 
-import application.player.model.PlayerModel;
+import application.auth.AuthServices;
+import application.player.dto.Player;
 import application.player.service.PlayerService;
 import com.google.common.flogger.FluentLogger;
-import org.assertj.core.util.Lists;
-import org.jasypt.util.text.BasicTextEncryptor;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.lang.Integer;
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -25,45 +17,44 @@ public class PlayerInfoEndpoint {
 
     private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
-    @Autowired
-    private Environment env;
-
-    @Autowired
+    private AuthServices authServices;
     private PlayerService playerService;
 
-    @GetMapping(value="/user")
-    public ResponseEntity<String> getUser(@RequestHeader("JWT") String jwt, @RequestParam(value = "id", required = true) Integer id,
-                                          @RequestParam(value = "password", required = true) String password) {
+    @Autowired
+    public PlayerInfoEndpoint(PlayerService playerService, AuthServices authServices) {
+        this.authServices = authServices;
+        this.playerService = playerService;
+    }
 
-        BCryptPasswordEncoder pwe = new BCryptPasswordEncoder();
+    @PostMapping(value = "/create")
+    public ResponseEntity<String> createUser(@RequestHeader("JWT") String jwt, @PathVariable(value = "playerID", required = true) Integer playerID,
+                                             @RequestBody(required = true) Player player) {
 
-        BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
-        List<String> profileList = Lists.newArrayList(env.getActiveProfiles());
-
-        if(!profileList.contains("dev")) {
-            try {
-                String decrypt = textEncryptor.decrypt(jwt);
-
-                LocalDateTime tokenDate = LocalDateTime.parse(decrypt.substring(decrypt.indexOf("-") + 1));
-
-                if (LocalDateTime.now().isAfter(tokenDate.plusSeconds(5))) {
-                    return new ResponseEntity(HttpStatus.NOT_FOUND);
-                }
-            } catch (Exception e) {
-                logger.atSevere().withCause(e).log("Could not decrypt token {}", e);
-                return new ResponseEntity(HttpStatus.BAD_REQUEST);
-            }
+        if (!authServices.isAuthenticated(jwt)) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
-        textEncryptor.setPassword(env.getProperty("security.jwt.password"));
+        playerService.createPlayerInfo(Player.toModel(player));
 
-        Optional<PlayerModel> playerOptional = playerService.getPlayerInfo(id);
-        if(playerOptional.isPresent()) {
-            if(playerOptional.get().getPlayerPassword().matches(textEncryptor.decrypt(password))) {
-            }
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping(value = "/player/{playerID}")
+    public ResponseEntity<String> getUser(@RequestHeader("JWT") String jwt, @PathVariable(value = "playerID", required = true) Integer playerID,
+                                          @RequestParam(value = "password", required = true) String password) {
+
+        if (!authServices.isAuthenticated(jwt)) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
+        Optional<Player> playerOptional = playerService.getPlayerInfo(playerID, password);
+
+        Gson gson = new Gson();
+
+        if(playerOptional.isPresent()){
+            return new ResponseEntity<>(gson.toJson(playerOptional.get()), HttpStatus.OK);
         }
 
         return new ResponseEntity(HttpStatus.NOT_FOUND);
-
     }
 }

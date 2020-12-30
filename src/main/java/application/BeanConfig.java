@@ -16,7 +16,7 @@ public class BeanConfig {
     Environment env;
 
     @Bean
-    public ApplicationContextProvider applicationContextProvider(){
+    public ApplicationContextProvider applicationContextProvider() {
         return new ApplicationContextProvider();
     }
 }
