@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.ws.rs.client.Entity;
 import java.util.Optional;
 
-@RestController("/stats/v1/player/{playerID}")
+@RestController
+@RequestMapping("/stats/v1/player/{playerID}")
 public class StatsEndpoint {
 
     private static final FluentLogger logger = FluentLogger.forEnclosingClass();
@@ -24,37 +25,38 @@ public class StatsEndpoint {
     @Autowired
     public StatsEndpoint(StatService statService, AuthServices authServices) {
         this.statService = statService;
+        this.authServices = authServices;
     }
 
     @PostMapping(value = "/create", produces = "application/json")
     public ResponseEntity<String> createStatsEndpoint(@RequestHeader("JWT") String jwt,
                                                       @PathVariable("playerID") Integer playerID,
-                                                      @RequestBody(required = true) Stats stats) {
+                                                      @RequestBody Stats stats) {
 
         if (authServices.isAuthenticated(jwt)) {
-                return new ResponseEntity(HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
 
         statService.saveStats(Stats.toModel(playerID, Entity.json(stats).getEntity()));
         logger.atInfo().log("Character Saved");
 
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/stats/{statsID}/update", consumes = "application/json")
     public ResponseEntity<String> updateStatsEndpoint(@RequestHeader("JWT") String jwt,
                                                       @PathVariable("statsID") Integer statsID,
                                                       @PathVariable("playerID") Integer playerID,
-                                                      @RequestBody(required = true) Stats stats) {
+                                                      @RequestBody Stats stats) {
 
         if (authServices.isAuthenticated(jwt)) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
 
         statService.saveStats(Stats.toModel(playerID, Entity.json(stats).getEntity()));
-        logger.atInfo().log("Character Saved");
+        logger.atInfo().log("Character Updated");
 
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 
 
@@ -63,7 +65,7 @@ public class StatsEndpoint {
                                                        @RequestParam(value = "id") Integer id) {
 
         if (authServices.isAuthenticated(jwt)) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
 
         Optional<StatsModel> statsModel = statService.getStats(id);

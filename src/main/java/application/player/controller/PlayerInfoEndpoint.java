@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/player")
 public class PlayerInfoEndpoint {
 
     private static final FluentLogger logger = FluentLogger.forEnclosingClass();
@@ -31,20 +32,20 @@ public class PlayerInfoEndpoint {
                                              @RequestBody(required = true) Player player) {
 
         if (!authServices.isAuthenticated(jwt)) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
 
         playerService.createPlayerInfo(Player.toModel(player));
 
-        return new ResponseEntity(HttpStatus.NOT_FOUND);
+        return new ResponseEntity(HttpStatus.CREATED);
     }
 
-    @GetMapping(value = "/player/{playerID}")
+    @GetMapping(value = "/{playerID}")
     public ResponseEntity<String> getUser(@RequestHeader("JWT") String jwt, @PathVariable(value = "playerID", required = true) Integer playerID,
                                           @RequestParam(value = "password", required = true) String password) {
 
         if (!authServices.isAuthenticated(jwt)) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
 
         Optional<Player> playerOptional = playerService.getPlayerInfo(playerID, password);
