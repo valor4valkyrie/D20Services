@@ -1,9 +1,9 @@
 package application.magic.model;
 
-import application.armor.model.ArmorModel;
-import application.weapon.model.WeaponModel;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "MAGIC_PROPERTIES")
