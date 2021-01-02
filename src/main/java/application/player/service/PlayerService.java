@@ -20,9 +20,9 @@ public class PlayerService {
         this.authServices = authServices;
     }
 
-    public void createPlayerInfo(PlayerModel playerModel) {
+    public PlayerModel createPlayerInfo(PlayerModel playerModel) {
         playerModel.setPlayerPassword(authServices.encryptPassword(playerModel.getPlayerPassword()));
-        playerRepo.save(playerModel);
+        return playerRepo.save(playerModel);
     }
 
     public Optional<Player> getPlayerInfo(Integer playerID, String password) {
