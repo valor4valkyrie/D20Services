@@ -7,6 +7,7 @@ import com.google.common.flogger.FluentLogger;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,9 +28,8 @@ public class PlayerInfoEndpoint {
         this.playerService = playerService;
     }
 
-    @PostMapping(value = "/create")
-    public ResponseEntity<String> createUser(@RequestHeader("JWT") String jwt, @PathVariable(value = "playerID", required = true) Integer playerID,
-                                             @RequestBody(required = true) Player player) {
+    @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> createUser(@RequestHeader("JWT") String jwt, @RequestBody Player player) {
 
         if (!authServices.isAuthenticated(jwt)) {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
@@ -40,9 +40,9 @@ public class PlayerInfoEndpoint {
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
-    @GetMapping(value = "/{playerID}")
-    public ResponseEntity<String> getUser(@RequestHeader("JWT") String jwt, @PathVariable(value = "playerID", required = true) Integer playerID,
-                                          @RequestParam(value = "password", required = true) String password) {
+    @GetMapping(value = "/{playerID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> getUser(@RequestHeader("JWT") String jwt, @PathVariable(value = "playerID") Integer playerID,
+                                          @RequestParam(value = "password") String password) {
 
         if (!authServices.isAuthenticated(jwt)) {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
@@ -56,6 +56,6 @@ public class PlayerInfoEndpoint {
             return new ResponseEntity<>(gson.toJson(playerOptional.get()), HttpStatus.OK);
         }
 
-        return new ResponseEntity(HttpStatus.NOT_FOUND);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }
