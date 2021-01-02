@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.5.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:latest.release")
     }
 }
 
@@ -20,30 +20,34 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.hibernate:hibernate-core:5.4.1.Final'
-    implementation 'mysql:mysql-connector-java:8.0.11'
-    implementation 'org.glassfish.jersey.core:jersey-client:2.26-b03'
-    implementation 'org.glassfish.jersey.media:jersey-media-json-jackson:2.26-b03'
-    implementation 'com.jwebmp.jpms.jackson.core:jackson-databind:0.67.0.3'
-    implementation 'org.springframework.security:spring-security-rsa:1.0.8.RELEASE'
-    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:2.1.1'
-    implementation 'org.springframework:spring-webmvc:5.1.6.RELEASE'
-    implementation 'org.springframework:spring-core:5.1.6.RELEASE'
-    implementation 'org.assertj:assertj-core:3.18.1'
-    implementation 'com.google.code.gson:gson:2.8.6'
-    //implementation 'org.springframework.data:spring-data-redis:2.1.6.RELEASE'
-    //implementation 'org.springframework.data:spring-data-elasticsearch:3.1.6.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-web:latest.release'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:latest.release'
+    implementation 'org.hibernate:hibernate-core:latest.release'
+    implementation 'mysql:mysql-connector-java:latest.release'
+    implementation 'org.glassfish.jersey.core:jersey-client:latest.release'
+    implementation 'org.glassfish.jersey.media:jersey-media-json-jackson:latest.release'
+    implementation 'com.jwebmp.jpms.jackson.core:jackson-databind:latest.release'
+    implementation 'org.springframework.security:spring-security-rsa:latest.release'
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:latest.release'
+    implementation 'org.springframework:spring-webmvc:latest.release'
+    implementation 'org.springframework:spring-core:latest.release'
+    implementation 'org.assertj:assertj-core:latest.release'
+    implementation 'com.google.code.gson:gson:latest.release'
+    //implementation 'org.springframework.data:spring-data-redis:latest.release'
+    //implementation 'org.springframework.data:spring-data-elasticsearch:latest.release'
 
     //Logging Dependencies
-    implementation 'com.google.flogger:flogger:0.4'
-    implementation 'com.google.flogger:flogger-system-backend:0.4'
+    implementation 'com.google.flogger:flogger:latest.release'
+    implementation 'com.google.flogger:flogger-system-backend:latest.release'
 
     //Spring Cloud Dependencies
-    //implementation 'org.springframework.cloud:spring-cloud-core:1.2.8.RELEASE'
-    //implementation 'org.springframework.cloud:spring-cloud-dependencies:Greenwich.SR1'
-    //implmentation 'org.springframework.cloud:spring-cloud-starter-config:2.1.2.RELEASE'
+    //implementation 'org.springframework.cloud:spring-cloud-core:latest.release'
+    //implementation 'org.springframework.cloud:spring-cloud-dependencies:latest.release'
+    //implmentation 'org.springframework.cloud:spring-cloud-starter-config:latest.release'
 
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:latest.release'
+}
+
+test {
+    useJUnitPlatform()
 }
