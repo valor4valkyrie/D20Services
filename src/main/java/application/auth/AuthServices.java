@@ -5,7 +5,6 @@ import org.assertj.core.util.Lists;
 import org.jasypt.util.text.BasicTextEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,8 +27,6 @@ public class AuthServices {
         BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
 
         textEncryptor.setPassword(env.getProperty("security.jwt.password"));
-
-        String g = textEncryptor.encrypt(env.getProperty("security.jwt.password") + "-" + LocalDateTime.now().toString());
 
         List<String> profileList = Lists.newArrayList(env.getActiveProfiles());
 
