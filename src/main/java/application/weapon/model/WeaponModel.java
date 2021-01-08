@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "PLAYER_CHARACTER_WEAPONS")
+@Table(name = "player_character_weapons")
 public class WeaponModel {
     @Id
     @Column(name = "WEAPON_ID")

@@ -5,7 +5,7 @@ import application.player.model.PlayerModel;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "PLAYER_CHARACTER")
+@Table(name = "player_character")
 public class CharacterModel {
 
     @Id

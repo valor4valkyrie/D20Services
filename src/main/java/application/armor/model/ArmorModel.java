@@ -6,12 +6,12 @@ import application.magic.model.MagicPropertyModel;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-
+/*
 @NamedEntityGraph(name = "Armor.magicProperties",
         attributeNodes = @NamedAttributeNode("magicModelList")
-)
+)*/
 @Entity
-@Table(name = "PLAYER_CHARACTER_ARMOR")
+@Table(name = "player_character_armor")
 public class ArmorModel {
 
     @Id

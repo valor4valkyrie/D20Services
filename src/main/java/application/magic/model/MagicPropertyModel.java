@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "MAGIC_PROPERTIES")
+@Table(name = "magic_properties")
 public class MagicPropertyModel {
 
     @Id
