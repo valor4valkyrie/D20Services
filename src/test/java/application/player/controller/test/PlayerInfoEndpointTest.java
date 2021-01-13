@@ -9,8 +9,8 @@ import com.google.gson.Gson;
 import org.jasypt.util.text.BasicTextEncryptor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.env.Environment;
@@ -23,12 +23,12 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ActiveProfiles("qa")
 @WebMvcTest(PlayerInfoEndpoint.class)
+@AutoConfigureMockMvc
 public class PlayerInfoEndpointTest {
 
     private Environment env;
@@ -41,6 +41,13 @@ public class PlayerInfoEndpointTest {
 
     @MockBean
     private AuthServices authServices;
+
+    private static String CREATE_URL = "/player_endpoint/v1/create";
+    private static String GET_URL = "/player_endpoint/v1/6";
+    private static String UPDATE_URL = "/player_endpoint/v1/6/update";
+
+    private Player player = new Player();
+    private Gson gson = new Gson();
 
     @Autowired
     public PlayerInfoEndpointTest(Environment env) {
@@ -57,17 +64,23 @@ public class PlayerInfoEndpointTest {
 
     @BeforeEach
     void setupTests() {
+        player.setPlayerEmail("test@test.com");
+        player.setPlayerFirstName("Testy");
+        player.setPlayerLastName("McTester");
+        player.setPlayerUserName("TestyMcTester");
+        player.setPlayerPassword("1234");
+
         when(authServices.isAuthenticated(anyString())).thenReturn(true);
-        when(playerService.createPlayerInfo(any(PlayerModel.class))).thenReturn(new PlayerModel());
-        when(playerService.getPlayerInfo(anyInt(), anyString())).thenReturn(Optional.of(new Player()));
+        when(playerService.createPlayerInfo(any(PlayerModel.class))).thenReturn(player);
+        when(playerService.getPlayerInfo(anyInt(), anyString())).thenReturn(Optional.of(player));
+        when(playerService.updatePlayerInfo(anyInt(), anyString(), any(PlayerModel.class)))
+                .thenReturn(Optional.of(player));
     }
 
     @Test
-    void createUserSuccessTest() throws Exception{
-        Player player = new Player();
-        Gson gson = new Gson();
-        System.out.println(gson.toJson(player));
-        mockMvc.perform(post("/player/create")
+    void createPlayerSuccessTest() throws Exception {
+        mockMvc.perform(post(CREATE_URL)
+
                 .header("JWT", getJWTKey())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(player)))
@@ -75,13 +88,10 @@ public class PlayerInfoEndpointTest {
     }
 
     @Test
-    void createUserUnauthorizedTest() throws Exception{
+    void createPlayerUnauthorizedTest() throws Exception{
         when(authServices.isAuthenticated(anyString())).thenReturn(false);
 
-        Player player = new Player();
-        Gson gson = new Gson();
-        System.out.println(gson.toJson(player));
-        mockMvc.perform(post("/player/create")
+        mockMvc.perform(post(CREATE_URL)
                 .header("JWT", getJWTKey())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(player)))
@@ -89,30 +99,65 @@ public class PlayerInfoEndpointTest {
     }
 
     @Test
-    void getUserSuccessTest() throws Exception {
-        mockMvc.perform(get("/player/6")
+    void getPlayerSuccessTest() throws Exception {
+        mockMvc.perform(get(GET_URL)
                 .param("password", "1234")
                 .header("JWT", getJWTKey()))
                 .andExpect(status().is2xxSuccessful());
     }
 
     @Test
-    void getUserNoUserFoundTest() throws Exception{
+    void getPlayerNoUserFoundTest() throws Exception{
         when(playerService.getPlayerInfo(anyInt(), anyString())).thenReturn(Optional.empty());
 
-        mockMvc.perform(get("/player/6")
+        mockMvc.perform(get(GET_URL)
                 .param("password", "1234")
                 .header("JWT", getJWTKey()))
                 .andExpect(status().isNoContent());
     }
 
     @Test
-    void getUserUnauthorizedTest() throws Exception{
+    void getPlayerUnauthorizedTest() throws Exception{
         when(authServices.isAuthenticated(anyString())).thenReturn(false);
 
-        mockMvc.perform(get("/player/6")
+        mockMvc.perform(get(GET_URL)
                 .param("password", "1234")
                 .header("JWT", getJWTKey()))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void putUpdatePlayerSuccessTest() throws Exception{
+        mockMvc.perform(put(UPDATE_URL)
+                .param("password", "1234")
+                .header("JWT", getJWTKey())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(gson.toJson(player)))
+                .andExpect(status().is2xxSuccessful());
+    }
+
+    @Test
+    void putUpdatePlayerNoUserFoundTest() throws Exception{
+        when(playerService.updatePlayerInfo(anyInt(), anyString(), any(PlayerModel.class)))
+                .thenReturn(Optional.empty());
+
+        mockMvc.perform(put(UPDATE_URL)
+                .param("password", "1234")
+                .header("JWT", getJWTKey())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(gson.toJson(player)))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void putUpdatePlayerNoAuthTest() throws Exception{
+        when(authServices.isAuthenticated(anyString())).thenReturn(false);
+
+        mockMvc.perform(put(UPDATE_URL)
+                .param("password", "1234")
+                .header("JWT", getJWTKey())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(gson.toJson(player)))
                 .andExpect(status().isUnauthorized());
     }
 }
