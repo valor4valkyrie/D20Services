@@ -1,5 +1,7 @@
 package application.player.model;
 
+import application.player.dto.Player;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,25 +10,37 @@ public class PlayerModel {
 
     @Id
     @Column(name = "PLAYER_ID")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer playerID;
 
     @Column(name = "PLAYER_FIRST_NAME")
     private String playerFirstName;
 
+    @Column(name = "PLAYER_MIDDLE_NAME")
+    private String playerMiddleName;
+
     @Column(name = "PLAYER_LAST_NAME")
     private String playerLastName;
 
     @Column(name = "PLAYER_EMAIL")
-    private String email;
+    private String playerEmail;
 
     @Column(name = "PLAYER_USERNAME")
-    private String userName;
+    private String playerUserName;
 
     @Column(name = "PLAYER_PASSWORD")
     private String playerPassword;
 
     public PlayerModel() {
+    }
+
+    public PlayerModel(Player player) {
+        this.playerFirstName = player.getPlayerFirstName();
+        this.playerMiddleName = player.getPlayerMiddleName();
+        this.playerLastName = player.getPlayerLastName();
+        this.playerEmail = player.getPlayerEmail();
+        this.playerUserName = player.getPlayerUserName();
+        this.playerPassword = player.getPlayerPassword();
     }
 
     public Integer getId() {
@@ -45,6 +59,14 @@ public class PlayerModel {
         this.playerFirstName = playerFirstName;
     }
 
+    public String getPlayerMiddleName() {
+        return playerMiddleName;
+    }
+
+    public void setPlayerMiddleName(String playerMiddleName) {
+        this.playerMiddleName = playerMiddleName;
+    }
+
     public String getPlayerLastName() {
         return playerLastName;
     }
@@ -53,20 +75,20 @@ public class PlayerModel {
         this.playerLastName = playerLastName;
     }
 
-    public String getEmail() {
-        return email;
+    public String getPlayerEmail() {
+        return playerEmail;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setPlayerEmail(String email) {
+        this.playerEmail = playerEmail;
     }
 
     public String getUserName() {
-        return userName;
+        return playerUserName;
     }
 
     public void setUserName(String userName) {
-        this.userName = userName;
+        this.playerUserName = playerUserName;
     }
 
     public String getPlayerPassword() {
