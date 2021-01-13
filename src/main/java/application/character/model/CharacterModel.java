@@ -26,7 +26,7 @@ public class CharacterModel {
     private String characterRace;
 
     @Column(name = "CHARACTER_HEIGHT")
-    private String characterHeight;
+    private int characterHeight;
 
     @Column(name = "CHARACTER_HEIGHT_UNIT")
     private String characterHeightUnit;
@@ -77,11 +77,11 @@ public class CharacterModel {
         this.characterRace = characterRace;
     }
 
-    public String getCharacterHeight() {
+    public int getCharacterHeight() {
         return characterHeight;
     }
 
-    public void setCharacterHeight(String characterHeight) {
+    public void setCharacterHeight(int characterHeight) {
         this.characterHeight = characterHeight;
     }
 
