@@ -7,4 +7,4 @@ gradlew.bat
 gedit
 out/
 build/
-src/main/resources/application.properties
+src/main/resources/
