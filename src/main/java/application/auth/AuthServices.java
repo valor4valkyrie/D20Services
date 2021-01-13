@@ -51,14 +51,13 @@ public class AuthServices {
     }
 
     public String encryptPassword(String password) {
-        //TODO: Change this environment variable to a password encryption separate from JWT
-        Pbkdf2PasswordEncoder encoder = new Pbkdf2PasswordEncoder(env.getProperty("security.jwt.password"), 10000, 128);
+        Pbkdf2PasswordEncoder encoder = new Pbkdf2PasswordEncoder("security.auth.key.token", 10000, 128);
+        //Pbkdf2PasswordEncoder encoder = new Pbkdf2PasswordEncoder(env.getProperty("security.jwt.password"), 10000, 128);
         return encoder.encode(password);
     }
 
     public boolean isValidPassword(String pwd, String encodedPwd) {
-        //TODO: Change this environment variable to a password encryption separate from JWT
-        Pbkdf2PasswordEncoder encoder = new Pbkdf2PasswordEncoder(env.getProperty("security.jwt.password"), 10000, 128);
+        Pbkdf2PasswordEncoder encoder = new Pbkdf2PasswordEncoder(env.getProperty("security.auth.key.token"), 10000, 128);
         return encoder.matches(pwd, encodedPwd);
     }
 }
