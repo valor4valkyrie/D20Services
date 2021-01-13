@@ -20,9 +20,9 @@ public class PlayerService {
         this.authServices = authServices;
     }
 
-    public PlayerModel createPlayerInfo(PlayerModel playerModel) {
+    public Player createPlayerInfo(PlayerModel playerModel) {
         playerModel.setPlayerPassword(authServices.encryptPassword(playerModel.getPlayerPassword()));
-        return playerRepo.save(playerModel);
+        return new Player(playerRepo.save(playerModel));
     }
 
     public Optional<Player> getPlayerInfo(Integer playerID, String password) {
@@ -38,6 +38,21 @@ public class PlayerService {
         }
 
         return playerOptional;
+    }
+
+    public Optional<Player> updatePlayerInfo(Integer playerID, String password, PlayerModel playerModel) {
+        Optional<PlayerModel> playerModelOptional = playerRepo.findById(playerID);
+
+        if (playerModelOptional.isPresent()) {
+            if (!authServices.isValidPassword(password, playerModelOptional.get().getPlayerPassword())) {
+                return Optional.empty();
+            } else {
+                playerModel.setId(playerModelOptional.get().getId());
+                return Optional.of(new Player(playerRepo.save(playerModel)));
+            }
+        }
+
+        return Optional.empty();
     }
 
 }
