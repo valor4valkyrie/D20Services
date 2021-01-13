@@ -8,6 +8,7 @@ public class Player implements Serializable {
     private static final Long serialVersionUID = 1L;
 
     private String playerFirstName;
+    private String playerMiddleName;
     private String playerLastName;
     private String playerEmail;
     private String playerUserName;
@@ -18,21 +19,10 @@ public class Player implements Serializable {
 
     public Player(PlayerModel playerModel) {
         playerFirstName = playerModel.getPlayerFirstName();
+        playerMiddleName = playerModel.getPlayerMiddleName();
         playerLastName = playerModel.getPlayerLastName();
-        playerEmail = playerModel.getEmail();
+        playerEmail = playerModel.getPlayerEmail();
         playerUserName = playerModel.getUserName();
-    }
-
-    public static PlayerModel toModel(Player player) {
-        PlayerModel model = new PlayerModel();
-
-        model.setPlayerFirstName(player.getPlayerFirstName());
-        model.setPlayerLastName(player.getPlayerLastName());
-        model.setEmail(player.getPlayerEmail());
-        model.setUserName(player.getPlayerUserName());
-        model.setPlayerPassword(player.getPlayerPassword());
-
-        return model;
     }
 
     public String getPlayerFirstName() {
@@ -41,6 +31,14 @@ public class Player implements Serializable {
 
     public void setPlayerFirstName(String playerFirstName) {
         this.playerFirstName = playerFirstName;
+    }
+
+    public String getPlayerMiddleName() {
+        return playerMiddleName;
+    }
+
+    public void setPlayerMiddleName(String playerMiddleName) {
+        this.playerMiddleName = playerMiddleName;
     }
 
     public String getPlayerLastName() {
