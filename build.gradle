@@ -16,9 +16,6 @@ repositories {
     mavenCentral()
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web:latest.release'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa:latest.release'
@@ -27,12 +24,12 @@ dependencies {
     implementation 'org.glassfish.jersey.core:jersey-client:latest.release'
     implementation 'org.glassfish.jersey.media:jersey-media-json-jackson:latest.release'
     implementation 'com.jwebmp.jpms.jackson.core:jackson-databind:latest.release'
-    implementation 'org.springframework.security:spring-security-rsa:latest.release'
     implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:latest.release'
-    implementation 'org.springframework:spring-webmvc:latest.release'
     implementation 'org.springframework:spring-core:latest.release'
     implementation 'org.assertj:assertj-core:latest.release'
     implementation 'com.google.code.gson:gson:latest.release'
+
+    //TODO: Will re-implement soon
     //implementation 'org.springframework.data:spring-data-redis:latest.release'
     //implementation 'org.springframework.data:spring-data-elasticsearch:latest.release'
 
@@ -41,11 +38,15 @@ dependencies {
     implementation 'com.google.flogger:flogger-system-backend:latest.release'
 
     //Spring Cloud Dependencies
-    //implementation 'org.springframework.cloud:spring-cloud-core:latest.release'
-    //implementation 'org.springframework.cloud:spring-cloud-dependencies:latest.release'
-    //implmentation 'org.springframework.cloud:spring-cloud-starter-config:latest.release'
+    implementation 'org.springframework.cloud:spring-cloud-core:latest.release'
+    implementation 'org.springframework.cloud:spring-cloud-dependencies:latest.release'
+    implementation 'org.springframework.cloud:spring-cloud-starter-config:latest.release'
+    implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap:latest.release'
 
-    testImplementation 'org.springframework.boot:spring-boot-starter-test:latest.release'
+    //Test dependencies
+    testImplementation ('org.springframework.boot:spring-boot-starter-test:latest.release'){
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
 }
 
 test {
