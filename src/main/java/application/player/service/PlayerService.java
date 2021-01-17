@@ -3,6 +3,7 @@ package application.player.service;
 import application.auth.AuthServices;
 import application.player.dto.Player;
 import application.player.model.PlayerModel;
+import application.verification.Verification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,13 +22,13 @@ public class PlayerService {
     }
 
     public Player createPlayerInfo(PlayerModel playerModel) {
+        if(!Verification.verifyEmail(playerModel.getPlayerEmail())) return new Player();
         playerModel.setPlayerPassword(authServices.encryptPassword(playerModel.getPlayerPassword()));
         return new Player(playerRepo.save(playerModel));
     }
 
     public Optional<Player> getPlayerInfo(Integer playerID, String password) {
         Optional<PlayerModel> playerModelOptional = playerRepo.findById(playerID);
-        Optional<Player> playerOptional = Optional.empty();
 
         if (playerModelOptional.isPresent()) {
             if (!authServices.isValidPassword(password, playerModelOptional.get().getPlayerPassword())) {
@@ -37,7 +38,7 @@ public class PlayerService {
             }
         }
 
-        return playerOptional;
+        return Optional.empty();
     }
 
     public Optional<Player> updatePlayerInfo(Integer playerID, String password, PlayerModel playerModel) {
@@ -47,7 +48,7 @@ public class PlayerService {
             if (!authServices.isValidPassword(password, playerModelOptional.get().getPlayerPassword())) {
                 return Optional.empty();
             } else {
-                playerModel.setId(playerModelOptional.get().getId());
+                playerModel.setId(playerID);
                 return Optional.of(new Player(playerRepo.save(playerModel)));
             }
         }
