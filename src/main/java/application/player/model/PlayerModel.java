@@ -79,15 +79,15 @@ public class PlayerModel {
         return playerEmail;
     }
 
-    public void setPlayerEmail(String email) {
+    public void setPlayerEmail(String playerEmail) {
         this.playerEmail = playerEmail;
     }
 
-    public String getUserName() {
+    public String getPlayerUserName() {
         return playerUserName;
     }
 
-    public void setUserName(String userName) {
+    public void setPlayerUserName(String playerUserName) {
         this.playerUserName = playerUserName;
     }
 

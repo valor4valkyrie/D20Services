@@ -22,7 +22,7 @@ public class Player implements Serializable {
         playerMiddleName = playerModel.getPlayerMiddleName();
         playerLastName = playerModel.getPlayerLastName();
         playerEmail = playerModel.getPlayerEmail();
-        playerUserName = playerModel.getUserName();
+        playerUserName = playerModel.getPlayerUserName();
     }
 
     public String getPlayerFirstName() {
